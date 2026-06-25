@@ -5,9 +5,9 @@ Use deterministic routing before reading specialist material.
 ## Priority
 
 1. Prefer diagnostics when the user provides or asks about reload logs, script snapshots, QVF backup/export, task failure evidence, or live-vs-local script drift.
-2. Prefer QlikSense app development for load script, data model, Set Analysis, chart expression, visualisation, Section Access, QVD, and performance questions.
+2. Prefer the Qlik Sense App Dev Skill for load script, data model, Set Analysis, chart expression, visualisation, Section Access, QVD, and performance questions.
 3. Prefer enterprise administration only when the user explicitly asks for QSEoW platform/server changes such as QRS, Engine API, reload tasks, schedules, streams, publishing, security rules, virtual proxies, or formal QA/sign-off.
-4. Prefer QlikSense first for Komment/write-back unless logs, services, security rules, or platform APIs are needed.
+4. Prefer the Qlik Sense App Dev Skill first for Komment/write-back unless logs, services, security rules, or platform APIs are needed.
 5. For future skills that are not installed or not in the catalog, return the intended skill ID plus the fallback chain.
 
 ## Evidence

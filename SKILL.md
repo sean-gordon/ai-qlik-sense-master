@@ -35,7 +35,7 @@ Run from the skill root:
 py scripts/qlik_master.py route "My Set Analysis returns zero when I select a month."
 py scripts/qlik_master.py detect
 py scripts/qlik_master.py list-sources
-py scripts/qlik_master.py install-plan qliksense
+py scripts/qlik_master.py install-plan qlik-sense-app-dev
 py scripts/qlik_master.py doctor
 ```
 

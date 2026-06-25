@@ -78,7 +78,12 @@ def routing_map() -> dict[str, Any]:
 
 
 def catalog_entries() -> dict[str, dict[str, Any]]:
-    return {entry["id"]: entry for entry in catalog().get("entries", [])}
+    entries: dict[str, dict[str, Any]] = {}
+    for entry in catalog().get("entries", []):
+        entries[entry["id"]] = entry
+        for alias in entry.get("aliases", []):
+            entries.setdefault(alias, entry)
+    return entries
 
 
 def local_search_roots() -> list[Path]:
@@ -104,6 +109,7 @@ def skill_candidate_names(entry: dict[str, Any]) -> list[str]:
         entry.get("id", ""),
         entry.get("display_name", ""),
         entry.get("install", {}).get("target_name", ""),
+        *entry.get("aliases", []),
     ]
     normalized = []
     for name in names:

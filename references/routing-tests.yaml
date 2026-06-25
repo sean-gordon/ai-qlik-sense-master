@@ -2,7 +2,7 @@
   "tests": [
     {
       "prompt": "My Set Analysis returns zero when I select a month.",
-      "expected_primary": "qliksense"
+      "expected_primary": "qlik-sense-app-dev"
     },
     {
       "prompt": "This reload failed; here is the log.",
@@ -14,11 +14,11 @@
     },
     {
       "prompt": "Review this app script for QVD optimisation.",
-      "expected_primary": "qliksense"
+      "expected_primary": "qlik-sense-app-dev"
     },
     {
       "prompt": "Komment write-back is not saving comments.",
-      "expected_primary": "qliksense"
+      "expected_primary": "qlik-sense-app-dev"
     },
     {
       "prompt": "Build a small embedded analytics frontend for this Qlik app.",

@@ -3,9 +3,13 @@
   "updated_at": "2026-06-25",
   "entries": [
     {
-      "id": "qliksense",
+      "id": "qlik-sense-app-dev",
       "kind": "skill",
-      "display_name": "QlikSense",
+      "display_name": "Qlik Sense App Dev Skill",
+      "aliases": [
+        "qliksense",
+        "QlikSense"
+      ],
       "description": "Qlik Sense app development, load scripts, data models, expressions, visualisations, Section Access, QVD patterns, performance optimisation, and Komment write-back guidance.",
       "github": {
         "repo": "https://github.com/sean-gordon/qlik-sense-app-dev-skill.git",

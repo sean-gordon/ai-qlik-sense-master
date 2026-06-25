@@ -4,7 +4,7 @@
       "id": "diagnostics",
       "primary": "qlik-sense-diagnostic-tool",
       "fallback": [
-        "qliksense"
+        "qlik-sense-app-dev"
       ],
       "signals": [
         "reload failed",
@@ -29,7 +29,7 @@
     },
     {
       "id": "app-development",
-      "primary": "qliksense",
+      "primary": "qlik-sense-app-dev",
       "fallback": [],
       "signals": [
         "set analysis",
@@ -67,7 +67,7 @@
     },
     {
       "id": "komment-writeback",
-      "primary": "qliksense",
+      "primary": "qlik-sense-app-dev",
       "fallback": [
         "qlik-sense-diagnostic-tool"
       ],
@@ -91,7 +91,7 @@
       "id": "enterprise-admin",
       "primary": "qlik-sense-enterprise-suite",
       "fallback": [
-        "qliksense"
+        "qlik-sense-app-dev"
       ],
       "signals": [
         "qseow",
@@ -119,7 +119,7 @@
       "id": "frontend-mashup",
       "primary": "qlik-frontend-builder",
       "fallback": [
-        "qliksense"
+        "qlik-sense-app-dev"
       ],
       "signals": [
         "extension",

@@ -75,7 +75,7 @@ It tells the agent to:
 
 Examples:
 
-- Set Analysis, `Aggr`, chart expressions, QVDs, synthetic keys, and Section Access route to `qliksense`.
+- Set Analysis, `Aggr`, chart expressions, QVDs, synthetic keys, and Section Access route to `qlik-sense-app-dev`.
 - Reload failures, reload logs, script snapshots, and QVF backup/export work route to `qlik-sense-diagnostic-tool`.
 - QSEoW administration and QRS/Engine API work currently route to `qlik-sense-enterprise-suite`, with fallback behaviour until that public catalog entry is added.
 
@@ -210,7 +210,7 @@ Expected primary skill:
 
 ```json
 {
-  "primary_skill": "qliksense"
+  "primary_skill": "qlik-sense-app-dev"
 }
 ```
 
@@ -269,7 +269,7 @@ py scripts\qlik_master.py list-sources
 Show the exact GitHub source, ref, target path, setup commands, validation commands, and approval requirements for a specialist.
 
 ```powershell
-py scripts\qlik_master.py install-plan qliksense
+py scripts\qlik_master.py install-plan qlik-sense-app-dev
 ```
 
 This command does not install anything.
@@ -279,7 +279,7 @@ This command does not install anything.
 Return the plan-only install result.
 
 ```powershell
-py scripts\qlik_master.py install-skill qliksense
+py scripts\qlik_master.py install-skill qlik-sense-app-dev
 ```
 
 ### `install-skill <skill-id> --execute`
@@ -287,7 +287,7 @@ py scripts\qlik_master.py install-skill qliksense
 Clone and install a specialist from the approved public catalog.
 
 ```powershell
-py scripts\qlik_master.py install-skill qliksense --execute
+py scripts\qlik_master.py install-skill qlik-sense-app-dev --execute
 ```
 
 Use this only after reviewing the install plan. The command can perform network access, clone a GitHub repository, copy files into a skills directory, and run setup/validation commands declared by the catalog entry.
@@ -295,7 +295,7 @@ Use this only after reviewing the install plan. The command can perform network 
 If a target already exists, use:
 
 ```powershell
-py scripts\qlik_master.py install-skill qliksense --execute --allow-overwrite
+py scripts\qlik_master.py install-skill qlik-sense-app-dev --execute --allow-overwrite
 ```
 
 ### `sync-catalog`
