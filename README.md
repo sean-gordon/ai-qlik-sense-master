@@ -85,7 +85,7 @@ Examples:
 
 The starter catalog includes:
 
-- `https://github.com/sean-gordon/qlik-ai-skill`
+- `https://github.com/sean-gordon/qlik-sense-app-dev-skill`
 - `https://github.com/sean-gordon/ai-qlik-sense-diagnostic-tool`
 
 More Qlik skills and tools can be added over time by adding catalog entries and route mappings.

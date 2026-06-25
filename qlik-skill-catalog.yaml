@@ -8,7 +8,7 @@
       "display_name": "QlikSense",
       "description": "Qlik Sense app development, load scripts, data models, expressions, visualisations, Section Access, QVD patterns, performance optimisation, and Komment write-back guidance.",
       "github": {
-        "repo": "https://github.com/sean-gordon/qlik-ai-skill.git",
+        "repo": "https://github.com/sean-gordon/qlik-sense-app-dev-skill.git",
         "ref": "main",
         "path": "."
       },
