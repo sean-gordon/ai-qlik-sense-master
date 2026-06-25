@@ -40,12 +40,9 @@ Loading every specialist reference for every Qlik question wastes context and ma
 |-- SKILL.md
 |-- README.md
 |-- LICENSE
-|-- PLAN.md
-|-- agents/
-|   `-- openai.yaml
+|-- qlik-skill-catalog.yaml
 |-- references/
 |   |-- install-policy.md
-|   |-- public-catalog.yaml
 |   |-- routing-map.yaml
 |   |-- routing-rules.md
 |   |-- routing-tests.yaml
@@ -53,7 +50,7 @@ Loading every specialist reference for every Qlik question wastes context and ma
 |-- scripts/
 |   |-- qlik_master.py
 |   `-- validate_registry.py
-`-- qlik-skill-catalog.yaml
+`-- .gitignore
 ```
 
 ## Core Concepts
@@ -84,9 +81,7 @@ Examples:
 
 ### Public Catalog
 
-`references/public-catalog.yaml` is the cached local copy of the public catalog.
-
-`qlik-skill-catalog.yaml` is the public catalog file intended to be fetched from GitHub by `sync-catalog`.
+`qlik-skill-catalog.yaml` is both the local catalog used by the skill and the public catalog file fetched from GitHub by `sync-catalog`.
 
 The starter catalog includes:
 
@@ -272,16 +267,15 @@ py scripts\qlik_master.py doctor
 ## Adding a New Qlik Specialist
 
 1. Add a new entry to `qlik-skill-catalog.yaml`.
-2. Copy the same entry into `references/public-catalog.yaml` or run `sync-catalog` after the public file is pushed.
-3. Add route signals to `references/routing-map.yaml`.
-4. Add at least one route test to `references/routing-tests.yaml`.
-5. Run:
+2. Add route signals to `references/routing-map.yaml`.
+3. Add at least one route test to `references/routing-tests.yaml`.
+4. Run:
 
 ```powershell
 py scripts\qlik_master.py doctor
 ```
 
-6. Confirm the new route returns the expected primary skill.
+5. Confirm the new route returns the expected primary skill.
 
 ## Catalog Entry Format
 

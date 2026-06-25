@@ -11,7 +11,7 @@ Use this skill as a router and coordinator. Do not treat it as the Qlik knowledg
 
 1. Classify the request by Qlik layer, evidence needed, operational risk, and likely specialist.
 2. Read `references/routing-map.yaml` for routing signals.
-3. Read `references/source-registry.yaml` and `references/public-catalog.yaml` only when source, availability, install, or update details are needed.
+3. Read `references/source-registry.yaml` and `qlik-skill-catalog.yaml` only when source, availability, install, or update details are needed.
 4. Prefer `scripts/qlik_master.py route "<request>"` for deterministic routing.
 5. If the selected specialist is installed, read only that specialist skill's `SKILL.md`, then follow its instructions.
 6. If the selected specialist is missing, run `scripts/qlik_master.py install-plan <skill-id>` and present the plan before any install/update action.
@@ -21,8 +21,8 @@ Use this skill as a router and coordinator. Do not treat it as the Qlik knowledg
 ## Routing Files
 
 - `references/routing-map.yaml`: request signals, fallback chains, risk, and evidence hints.
-- `references/public-catalog.yaml`: cached public GitHub catalog of Qlik skills and tools.
 - `references/source-registry.yaml`: catalog URL, local override paths, and install policy.
+- `qlik-skill-catalog.yaml`: public and local catalog of Qlik skills and tools.
 - `references/routing-rules.md`: human-readable routing notes.
 - `references/install-policy.md`: safety rules for install/update actions.
 - `references/routing-tests.yaml`: machine-readable route expectations.

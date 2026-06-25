@@ -1,3 +1,0 @@
-display_name: AI Qlik Sense Master Skill
-short_description: Routes Qlik requests to specialist skills and GitHub-hosted tools.
-default_prompt: Route this Qlik Sense request to the smallest correct specialist skill or tool, then explain the evidence and next action.

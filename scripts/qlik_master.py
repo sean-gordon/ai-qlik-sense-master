@@ -19,7 +19,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 REFERENCES = ROOT / "references"
 SOURCE_REGISTRY = REFERENCES / "source-registry.yaml"
-PUBLIC_CATALOG = REFERENCES / "public-catalog.yaml"
+DEFAULT_CATALOG = ROOT / "qlik-skill-catalog.yaml"
 ROUTING_MAP = REFERENCES / "routing-map.yaml"
 ROUTING_TESTS = REFERENCES / "routing-tests.yaml"
 
@@ -58,8 +58,19 @@ def source_registry() -> dict[str, Any]:
     return load_data(SOURCE_REGISTRY)
 
 
+def catalog_path() -> Path:
+    registry = source_registry()
+    raw_path = registry.get("public_catalog", {}).get("cached_snapshot", str(DEFAULT_CATALOG))
+    path = expand_path(raw_path)
+    if path is None:
+        return DEFAULT_CATALOG
+    if not path.is_absolute():
+        path = ROOT / path
+    return path
+
+
 def catalog() -> dict[str, Any]:
-    return load_data(PUBLIC_CATALOG)
+    return load_data(catalog_path())
 
 
 def routing_map() -> dict[str, Any]:
@@ -273,7 +284,7 @@ def validate_catalog(data: dict[str, Any]) -> list[str]:
     errors = []
     ids = set()
     if not isinstance(data.get("entries"), list):
-        errors.append("public-catalog.yaml must contain an entries list.")
+        errors.append("Catalog must contain an entries list.")
         return errors
     for index, entry in enumerate(data["entries"]):
         prefix = f"entries[{index}]"
@@ -369,9 +380,9 @@ def sync_catalog() -> dict[str, Any]:
     if errors:
         return {"status": "failed", "errors": errors}
 
-    snapshot = expand_path(registry.get("public_catalog", {}).get("cached_snapshot", str(PUBLIC_CATALOG)))
+    snapshot = expand_path(registry.get("public_catalog", {}).get("cached_snapshot", str(DEFAULT_CATALOG)))
     if snapshot is None:
-        snapshot = PUBLIC_CATALOG
+        snapshot = DEFAULT_CATALOG
     if not snapshot.is_absolute():
         snapshot = ROOT / snapshot
     write_data_atomic(snapshot, data)

@@ -4,7 +4,7 @@ Default mode is plan-only.
 
 ## Allowed Sources
 
-Use only entries from `references/public-catalog.yaml` or explicitly approved local overrides. Do not install from repository URLs supplied directly in user prompts unless the user explicitly asks to add or trust that source.
+Use only entries from `qlik-skill-catalog.yaml` or explicitly approved local overrides. Do not install from repository URLs supplied directly in user prompts unless the user explicitly asks to add or trust that source.
 
 ## Approval-Gated Actions
 
