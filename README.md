@@ -111,21 +111,73 @@ https://raw.githubusercontent.com/sean-gordon/ai-qlik-sense-master/main/qlik-ski
 
 ## Installation
 
-Install this folder into your Codex skills directory.
+Clone this repository into the skill or extension directory used by your agent.
 
-On Windows:
+### Windows PowerShell
+
+Claude:
+
+```powershell
+git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "$env:USERPROFILE\.claude\skills\ai-qlik-sense-master"
+```
+
+Codex:
 
 ```powershell
 git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "$env:USERPROFILE\.codex\skills\ai-qlik-sense-master"
 ```
 
-On macOS or Linux:
+Gemini CLI:
+
+```powershell
+$d="$env:USERPROFILE\.gemini\extensions\ai-qlik-sense-master"; git clone https://github.com/sean-gordon/ai-qlik-sense-master.git $d; Copy-Item "$d\SKILL.md" "$d\GEMINI.md" -Force; '{"name":"ai-qlik-sense-master","version":"1.0.0","contextFileName":"GEMINI.md"}' | Set-Content "$d\gemini-extension.json" -Encoding utf8
+```
+
+Antigravity:
+
+```powershell
+git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "$env:USERPROFILE\.antigravity\skills\ai-qlik-sense-master"
+```
+
+Antigravity IDE variant:
+
+```powershell
+git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "$env:USERPROFILE\.antigravity-ide\skills\ai-qlik-sense-master"
+```
+
+### macOS Or Linux
+
+Claude:
+
+```bash
+git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "$HOME/.claude/skills/ai-qlik-sense-master"
+```
+
+Codex:
 
 ```bash
 git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "${CODEX_HOME:-$HOME/.codex}/skills/ai-qlik-sense-master"
 ```
 
-The same folder can also be copied into compatible skill locations for other agent tools that understand Codex-style skills.
+Gemini CLI:
+
+```bash
+d="$HOME/.gemini/extensions/ai-qlik-sense-master"; git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "$d" && cp "$d/SKILL.md" "$d/GEMINI.md" && printf '%s\n' '{"name":"ai-qlik-sense-master","version":"1.0.0","contextFileName":"GEMINI.md"}' > "$d/gemini-extension.json"
+```
+
+Antigravity:
+
+```bash
+git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "$HOME/.antigravity/skills/ai-qlik-sense-master"
+```
+
+Antigravity IDE variant:
+
+```bash
+git clone https://github.com/sean-gordon/ai-qlik-sense-master.git "$HOME/.antigravity-ide/skills/ai-qlik-sense-master"
+```
+
+For Gemini CLI, the one-liner installs this repository as a Gemini extension and creates `GEMINI.md` plus `gemini-extension.json` so Gemini can load the skill instructions as extension context.
 
 ## Quick Start
 
