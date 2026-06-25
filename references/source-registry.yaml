@@ -1,0 +1,24 @@
+{
+  "public_catalog": {
+    "url": "https://raw.githubusercontent.com/sean-gordon/ai-qlik-sense-master/main/qlik-skill-catalog.yaml",
+    "cached_snapshot": "references/public-catalog.yaml"
+  },
+  "local_overrides": {
+    "enabled": true,
+    "paths": [
+      "${CODEX_HOME}/skills",
+      "${USERPROFILE}/.codex/skills",
+      "${HOME}/.codex/skills",
+      "./skills"
+    ]
+  },
+  "install_policy": {
+    "default_mode": "plan-only",
+    "require_approval_for": [
+      "network",
+      "writes_outside_workspace",
+      "overwrite_existing_skill"
+    ],
+    "allow_prompt_supplied_sources": false
+  }
+}

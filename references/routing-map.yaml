@@ -1,0 +1,141 @@
+{
+  "routes": [
+    {
+      "id": "diagnostics",
+      "primary": "qlik-sense-diagnostic-tool",
+      "fallback": [
+        "qliksense"
+      ],
+      "signals": [
+        "reload failed",
+        "reload failure",
+        "reload log",
+        "script log",
+        "script snapshot",
+        "qvf backup",
+        "backup app",
+        "export app",
+        "live script drift",
+        "reload error",
+        "task failed"
+      ],
+      "evidence_needed": [
+        "reload log",
+        "app id or app name",
+        "script snapshot",
+        "environment details"
+      ],
+      "risk": "diagnostic"
+    },
+    {
+      "id": "app-development",
+      "primary": "qliksense",
+      "fallback": [],
+      "signals": [
+        "set analysis",
+        "aggr",
+        "total",
+        "above",
+        "chart expression",
+        "kpi",
+        "dash",
+        "null",
+        "load script",
+        "resident",
+        "applymap",
+        "join",
+        "keep",
+        "qvd",
+        "incremental",
+        "synthetic key",
+        "circular reference",
+        "section access",
+        "visualisation",
+        "visualization",
+        "data model",
+        "qvd optimisation",
+        "qvd optimization",
+        "expression performance"
+      ],
+      "evidence_needed": [
+        "script or expression",
+        "dimensions and measures",
+        "selection context",
+        "expected vs actual result"
+      ],
+      "risk": "local-advice"
+    },
+    {
+      "id": "komment-writeback",
+      "primary": "qliksense",
+      "fallback": [
+        "qlik-sense-diagnostic-tool"
+      ],
+      "signals": [
+        "komment",
+        "kaptain",
+        "write-back",
+        "writeback",
+        "comments not saving",
+        "partial reload comments"
+      ],
+      "evidence_needed": [
+        "extension behavior",
+        "service status",
+        "reload log if partial reload is involved",
+        "security context"
+      ],
+      "risk": "mixed"
+    },
+    {
+      "id": "enterprise-admin",
+      "primary": "qlik-sense-enterprise-suite",
+      "fallback": [
+        "qliksense"
+      ],
+      "signals": [
+        "qseow",
+        "qrs",
+        "engine api",
+        "reload task",
+        "schedule",
+        "stream",
+        "publish",
+        "security rule",
+        "virtual proxy",
+        "custom property",
+        "go-live sign-off",
+        "formal qa"
+      ],
+      "evidence_needed": [
+        "environment details",
+        "app id",
+        "task id",
+        "intended platform change"
+      ],
+      "risk": "server-admin"
+    },
+    {
+      "id": "frontend-mashup",
+      "primary": "qlik-frontend-builder",
+      "fallback": [
+        "qliksense"
+      ],
+      "signals": [
+        "extension",
+        "mashup",
+        "embedded analytics",
+        "nebula",
+        "capability api",
+        "qlik frontend"
+      ],
+      "evidence_needed": [
+        "frontend framework",
+        "embedding method",
+        "authentication context",
+        "target Qlik app"
+      ],
+      "risk": "local-build"
+    }
+  ]
+}

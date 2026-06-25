@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+build/
+dist/
+*.egg-info/
+
+# Test and coverage output
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+*.cer
+*.crt
+*.csr
+*.kdb
+*.sth
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.ppk
+
+# Qlik and customer data artifacts
+*.qvf
+*.qvd
+*.qvw
+*.log
+*.qvx
+*.qvs
+backup_app_*.qvf
+scriptlog*.txt
+reload*.txt
+
+# Generated retrieval indexes and local tool data
+index_workspace*/
+.index/
+chroma_db/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+chunks.jsonl
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+
+# Package manager noise
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
