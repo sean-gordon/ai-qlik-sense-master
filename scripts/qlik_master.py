@@ -40,7 +40,19 @@ def write_data_atomic(path: Path, data: dict[str, Any]) -> None:
         json.dump(data, handle, indent=2)
         handle.write("\n")
         temp_name = handle.name
-    Path(temp_name).replace(path)
+    temp_path = Path(temp_name)
+    try:
+        temp_path.replace(path)
+    except PermissionError:
+        # Some managed Windows workspaces allow file writes but block replace/unlink.
+        # Keep sync usable in that environment while preserving atomic replace elsewhere.
+        with path.open("w", encoding="utf-8") as handle:
+            json.dump(data, handle, indent=2)
+            handle.write("\n")
+        try:
+            temp_path.unlink()
+        except OSError:
+            pass
 
 
 def emit(data: Any) -> None:
@@ -645,6 +657,8 @@ def execute_install(plan: dict[str, Any], allow_overwrite: bool) -> dict[str, An
 
 def install_skill(skill_id: str, execute: bool = False, allow_overwrite: bool = False) -> dict[str, Any]:
     plan = install_plan(skill_id)
+    if plan.get("action") == "none":
+        return {"status": "already-ready", "performed": False, "plan": plan}
     if execute:
         return execute_install(plan, allow_overwrite)
     if plan.get("mode") == "plan-only" or plan.get("action") in ("none", "refuse"):
