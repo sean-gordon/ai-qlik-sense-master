@@ -100,6 +100,54 @@ class QlikMasterUserStoryTests(unittest.TestCase):
                     "capabilities": ["diagnostics"],
                 },
                 {
+                    "id": "qlik-ai-skill",
+                    "kind": "skill",
+                    "display_name": "Qlik Sense AI Skill",
+                    "aliases": ["QlikSenseAI", "qlik-ai-skill"],
+                    "description": "Qlik Sense AI skill with local knowledge retrieval tools.",
+                    "github": {
+                        "repo": "https://github.com/example/qlik-ai-skill.git",
+                        "ref": "main",
+                        "path": ".",
+                    },
+                    "install": {
+                        "target_name": "QlikSense",
+                        "setup_commands": ["tool/setup.py"],
+                        "validation_commands": [
+                            "tool/qlik_search.py --domains",
+                            "tool/qlik_mcp_server.py",
+                        ],
+                    },
+                    "tools": [
+                        {
+                            "id": "qlik-knowledge-search-cli",
+                            "command": "tool/qlik_search.py",
+                            "purpose": "Search Qlik references from the command line.",
+                        },
+                        {
+                            "id": "qlik-knowledge-mcp",
+                            "command": "tool/qlik_mcp_server.py",
+                            "purpose": "Expose qlik_knowledge_search via MCP.",
+                        },
+                    ],
+                    "routing": {
+                        "priority": 70,
+                        "signals": [
+                            "qlik-ai-skill",
+                            "qlik_knowledge_search",
+                            "use qlik_knowledge_search",
+                            "qlik_knowledge_search to find",
+                            "qlik mcp server",
+                            "retrieval tool",
+                            "tool-first retrieval",
+                        ],
+                        "evidence_needed": ["target assistant or host"],
+                        "risk": "local-tooling",
+                        "fallback": ["qlik-sense-app-dev"],
+                    },
+                    "capabilities": ["knowledge-retrieval", "mcp"],
+                },
+                {
                     "id": "planned-missing-skill",
                     "kind": "skill",
                     "display_name": "Planned Missing Skill",
@@ -163,6 +211,10 @@ class QlikMasterUserStoryTests(unittest.TestCase):
                     "prompt": "This reload failed.",
                     "expected_primary": "qlik-sense-diagnostic-tool",
                 },
+                {
+                    "prompt": "Use qlik_knowledge_search for retrieval.",
+                    "expected_primary": "qlik-ai-skill",
+                },
             ]
         }
 
@@ -171,6 +223,7 @@ class QlikMasterUserStoryTests(unittest.TestCase):
         self._write_json(self.routing_map, self.legacy_routes)
         self._write_json(self.routing_tests, self.route_tests)
         self._install_ready_skill("QlikSense", "tool/qlik_search.py")
+        self._install_ready_skill("QlikSense", "tool/qlik_mcp_server.py")
         self._install_ready_skill("qlik-sense-diagnostic-tool", "SKILL.md")
 
         self.patches = [
@@ -210,6 +263,23 @@ class QlikMasterUserStoryTests(unittest.TestCase):
         self.assertEqual(result["primary_skill"], "qlik-sense-diagnostic-tool")
         self.assertEqual(result["secondary_skills"], ["qlik-sense-app-dev"])
         self.assertEqual(result["risk"], "diagnostic")
+
+    def test_routes_retrieval_tooling_prompt_to_qlik_ai_skill(self):
+        result = qlik_master.route_request("Use qlik_knowledge_search for Qlik reference retrieval.")
+        self.assertEqual(result["primary_skill"], "qlik-ai-skill")
+        self.assertEqual(result["secondary_skills"], ["qlik-sense-app-dev"])
+        self.assertEqual(result["risk"], "local-tooling")
+        self.assertEqual(result["availability"]["status"], "ready")
+        self.assertEqual(
+            [tool["id"] for tool in result["tools"]],
+            ["qlik-knowledge-search-cli", "qlik-knowledge-mcp"],
+        )
+
+    def test_keeps_general_qlik_prompts_on_existing_specialists(self):
+        app_result = qlik_master.route_request("My Qlik data model has a synthetic key.")
+        diagnostic_result = qlik_master.route_request("Create a QSEoW reload task and schedule it.")
+        self.assertEqual(app_result["primary_skill"], "qlik-sense-app-dev")
+        self.assertEqual(diagnostic_result["primary_skill"], "qlik-sense-diagnostic-tool")
 
     def test_defaults_unclear_qlik_request_to_app_development(self):
         result = qlik_master.route_request("I need help with a Qlik question.")

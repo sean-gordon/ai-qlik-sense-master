@@ -27,6 +27,22 @@
     {
       "prompt": "Install the qlik-ai-skill retrieval tool for Qlik knowledge search.",
       "expected_primary": "qlik-ai-skill"
+    },
+    {
+      "prompt": "Use qlik_knowledge_search to find Qlik Set Analysis references.",
+      "expected_primary": "qlik-ai-skill"
+    },
+    {
+      "prompt": "Register the Qlik MCP server for knowledge retrieval.",
+      "expected_primary": "qlik-ai-skill"
+    },
+    {
+      "prompt": "Set up tool-first retrieval for the Qlik Sense AI skill.",
+      "expected_primary": "qlik-ai-skill"
+    },
+    {
+      "prompt": "My Qlik data model has a synthetic key.",
+      "expected_primary": "qlik-sense-app-dev"
     }
   ]
 }
