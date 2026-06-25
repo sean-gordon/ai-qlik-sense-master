@@ -23,6 +23,10 @@
     {
       "prompt": "Build a small embedded analytics frontend for this Qlik app.",
       "expected_primary": "qlik-sense-app-dev"
+    },
+    {
+      "prompt": "Install the qlik-ai-skill retrieval tool for Qlik knowledge search.",
+      "expected_primary": "qlik-ai-skill"
     }
   ]
 }

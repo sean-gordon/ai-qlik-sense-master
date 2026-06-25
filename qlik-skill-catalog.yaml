@@ -1,5 +1,5 @@
 {
-  "catalog_version": 1,
+  "catalog_version": 2,
   "updated_at": "2026-06-25",
   "entries": [
     {
@@ -160,6 +160,81 @@
         "qvf-backup",
         "app-export",
         "live-script-drift"
+      ]
+    },
+    {
+      "id": "qlik-ai-skill",
+      "kind": "skill",
+      "display_name": "Qlik Sense AI Skill",
+      "aliases": [
+        "QlikSenseAI",
+        "qlik-ai-skill"
+      ],
+      "description": "Comprehensive Qlik Sense AI skill with app-development references, function and advanced pattern libraries, Komment guidance, and local retrieval tools for semantic knowledge search.",
+      "github": {
+        "repo": "https://github.com/sean-gordon/qlik-ai-skill.git",
+        "ref": "main",
+        "path": "."
+      },
+      "install": {
+        "target_name": "QlikSense",
+        "setup_commands": [
+          "tool/setup.py"
+        ],
+        "validation_commands": [
+          "tool/qlik_search.py --domains",
+          "tool/qlik_mcp_server.py"
+        ]
+      },
+      "tools": [
+        {
+          "id": "qlik-knowledge-search-cli",
+          "command": "tool/qlik_search.py",
+          "purpose": "Search the bundled Qlik Sense reference corpus from the command line in the current session."
+        },
+        {
+          "id": "qlik-knowledge-mcp",
+          "command": "tool/qlik_mcp_server.py",
+          "purpose": "Expose qlik_knowledge_search and qlik_knowledge_domains as MCP retrieval tools."
+        }
+      ],
+      "routing": {
+        "priority": 70,
+        "signals": [
+          "qlik-ai-skill",
+          "qlik ai skill",
+          "qliksenseai",
+          "qlik knowledge search",
+          "qlik_knowledge_search",
+          "qlik_knowledge_domains",
+          "qlik mcp server",
+          "semantic search retrieval",
+          "retrieval tool",
+          "tool-first retrieval"
+        ],
+        "evidence_needed": [
+          "target assistant or host",
+          "whether MCP tools are available",
+          "Python/runtime availability",
+          "installation path if installing or updating"
+        ],
+        "risk": "local-tooling",
+        "fallback": [
+          "qlik-sense-app-dev"
+        ]
+      },
+      "capabilities": [
+        "app-development",
+        "load-script",
+        "data-model",
+        "expressions",
+        "visualisations",
+        "section-access",
+        "qvd",
+        "performance",
+        "komment",
+        "knowledge-retrieval",
+        "mcp"
       ]
     }
   ]
