@@ -86,6 +86,10 @@ def catalog_entries() -> dict[str, dict[str, Any]]:
     return entries
 
 
+def catalog_entry_list() -> list[dict[str, Any]]:
+    return list(catalog().get("entries", []))
+
+
 def local_search_roots() -> list[Path]:
     registry = source_registry()
     roots: list[Path] = []
@@ -213,7 +217,65 @@ def score_route(route: dict[str, Any], request: str) -> tuple[int, list[str]]:
     return score, matched
 
 
-def route_request(request: str) -> dict[str, Any]:
+def add_match(matched: list[str], value: str) -> None:
+    if value and value not in matched:
+        matched.append(value)
+
+
+def score_catalog_entry(entry: dict[str, Any], request: str) -> tuple[int, list[str]]:
+    text = normalize(request)
+    matched: list[str] = []
+    score = 0
+
+    routing = entry.get("routing", {})
+    for signal in routing.get("signals", []):
+        signal_text = normalize(signal)
+        if signal_text and signal_text in text:
+            add_match(matched, signal)
+            score += max(3, len(signal_text.split()) * 3)
+
+    for capability in entry.get("capabilities", []):
+        capability_text = normalize(str(capability).replace("-", " "))
+        if capability_text and capability_text in text:
+            add_match(matched, str(capability))
+            score += max(1, len(capability_text.split()))
+
+    for name in [entry.get("id", ""), entry.get("display_name", ""), *entry.get("aliases", [])]:
+        name_text = normalize(str(name).replace("-", " "))
+        if name_text and name_text in text:
+            add_match(matched, str(name))
+            score += max(2, len(name_text.split()) * 2)
+
+    return score, matched
+
+
+def route_from_catalog(request: str) -> tuple[dict[str, Any] | None, list[str], list[dict[str, Any]]]:
+    scored = []
+    for index, entry in enumerate(catalog_entry_list()):
+        score, matched = score_catalog_entry(entry, request)
+        if score:
+            priority = int(entry.get("routing", {}).get("priority", 0))
+            scored.append((score, priority, -index, entry, matched))
+
+    if scored:
+        scored.sort(reverse=True, key=lambda item: (item[0], item[1], item[2]))
+        candidates = [
+            {
+                "skill_id": entry.get("id"),
+                "score": score,
+                "priority": priority,
+                "matched": matched,
+            }
+            for score, priority, _, entry, matched in scored[:5]
+        ]
+        _, _, _, selected, matched = scored[0]
+        return selected, matched, candidates
+
+    default = next((entry for entry in catalog_entry_list() if entry.get("id") == "qlik-sense-app-dev"), None)
+    return default, [], []
+
+
+def route_from_legacy_map(request: str) -> tuple[dict[str, Any] | None, list[str], list[dict[str, Any]]]:
     routes = routing_map().get("routes", [])
     scored = []
     for index, route in enumerate(routes):
@@ -221,17 +283,42 @@ def route_request(request: str) -> dict[str, Any]:
         if score:
             scored.append((score, -index, route, matched))
 
-    if scored:
-        scored.sort(reverse=True, key=lambda item: (item[0], item[1]))
-        _, _, selected, matched = scored[0]
-    else:
-        selected = next((route for route in routes if route.get("id") == "app-development"), routes[0])
-        matched = []
+    if not scored:
+        return None, [], []
 
-    primary = selected.get("primary")
-    secondary = selected.get("fallback", [])
+    scored.sort(reverse=True, key=lambda item: (item[0], item[1]))
+    candidates = [
+        {
+            "skill_id": route.get("primary"),
+            "score": score,
+            "matched": matched,
+        }
+        for score, _, route, matched in scored[:5]
+    ]
+    _, _, selected, matched = scored[0]
+    return selected, matched, candidates
+
+
+def selected_route_payload(selected: dict[str, Any], request: str, matched: list[str], candidates: list[dict[str, Any]], source: str) -> dict[str, Any]:
     entries = catalog_entries()
-    entry = entries.get(primary)
+    if source == "catalog":
+        entry = selected
+        primary = selected.get("id")
+        routing = selected.get("routing", {})
+        secondary = routing.get("fallback", [])
+        evidence_needed = routing.get("evidence_needed", [])
+        risk = routing.get("risk", "local-advice")
+        route_id = f"catalog:{primary}"
+        tools = selected.get("tools", [])
+    else:
+        primary = selected.get("primary")
+        secondary = selected.get("fallback", [])
+        entry = entries.get(primary)
+        evidence_needed = selected.get("evidence_needed", [])
+        risk = selected.get("risk")
+        route_id = selected.get("id")
+        tools = entry.get("tools", []) if entry else []
+
     availability = (
         check_entry(entry)
         if entry
@@ -246,15 +333,47 @@ def route_request(request: str) -> dict[str, Any]:
     result = {
         "primary_skill": primary,
         "secondary_skills": secondary,
-        "route_id": selected.get("id"),
-        "reason": "Matched signals: " + ", ".join(matched) if matched else "No specific signal matched; defaulted to app-development.",
-        "evidence_needed": selected.get("evidence_needed", []),
-        "risk": selected.get("risk"),
+        "route_id": route_id,
+        "lookup_source": source,
+        "reason": "Matched catalog signals: " + ", ".join(matched) if matched else "No specific signal matched; defaulted to app-development.",
+        "evidence_needed": evidence_needed,
+        "risk": risk,
+        "tools": tools,
+        "candidates": candidates,
         "availability": availability,
     }
     if availability["status"] != "ready":
         result["install_plan_hint"] = install_plan(primary)
     return result
+
+
+def route_request(request: str) -> dict[str, Any]:
+    selected, matched, candidates = route_from_catalog(request)
+    if selected:
+        return selected_route_payload(selected, request, matched, candidates, "catalog")
+
+    selected, matched, candidates = route_from_legacy_map(request)
+    if selected:
+        return selected_route_payload(selected, request, matched, candidates, "routing-map")
+
+    return {
+        "primary_skill": None,
+        "secondary_skills": [],
+        "route_id": None,
+        "lookup_source": "none",
+        "reason": "No catalog entry or routing-map entry matched the request.",
+        "evidence_needed": [],
+        "risk": None,
+        "tools": [],
+        "candidates": [],
+        "availability": {
+            "id": None,
+            "status": "not-in-catalog",
+            "path": None,
+            "tools": [],
+            "missing_tools": [],
+        },
+    }
 
 
 def detect() -> dict[str, Any]:
@@ -277,6 +396,9 @@ def list_sources() -> dict[str, Any]:
                 "source": entry.get("github", {}).get("repo"),
                 "local_status": status.get("status"),
                 "path": status.get("path"),
+                "capabilities": entry.get("capabilities", []),
+                "tools": entry.get("tools", []),
+                "routing_signals": entry.get("routing", {}).get("signals", []),
             }
         )
     return {
@@ -294,7 +416,7 @@ def validate_catalog(data: dict[str, Any]) -> list[str]:
         return errors
     for index, entry in enumerate(data["entries"]):
         prefix = f"entries[{index}]"
-        for field in ("id", "kind", "display_name", "github", "install"):
+        for field in ("id", "kind", "display_name", "github", "install", "tools", "routing"):
             if field not in entry:
                 errors.append(f"{prefix} missing required field: {field}")
         entry_id = entry.get("id")
@@ -307,6 +429,14 @@ def validate_catalog(data: dict[str, Any]) -> list[str]:
         install = entry.get("install", {})
         if install and not install.get("target_name"):
             errors.append(f"{prefix}.install missing target_name")
+        routing = entry.get("routing", {})
+        if routing and not isinstance(routing.get("signals", []), list):
+            errors.append(f"{prefix}.routing.signals must be a list")
+        if routing and not routing.get("signals"):
+            errors.append(f"{prefix}.routing must include at least one signal")
+        tools = entry.get("tools", [])
+        if tools and not isinstance(tools, list):
+            errors.append(f"{prefix}.tools must be a list")
     return errors
 
 

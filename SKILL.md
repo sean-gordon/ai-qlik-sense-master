@@ -10,9 +10,9 @@ Use this skill as a router and coordinator. Do not treat it as the Qlik knowledg
 ## Default Workflow
 
 1. Classify the request by Qlik layer, evidence needed, operational risk, and likely specialist.
-2. Read `references/routing-map.yaml` for routing signals.
-3. Read `references/source-registry.yaml` and `qlik-skill-catalog.yaml` only when source, availability, install, or update details are needed.
-4. Prefer `scripts/qlik_master.py route "<request>"` for deterministic routing.
+2. Prefer `scripts/qlik_master.py route "<request>"` for deterministic catalog lookup.
+3. Use `qlik-skill-catalog.yaml` as the maintained list of public Qlik skills, tools, routing signals, and install sources.
+4. Read `references/source-registry.yaml` and `qlik-skill-catalog.yaml` when source, availability, install, or update details are needed.
 5. If the selected specialist is installed, read only that specialist skill's `SKILL.md`, then follow its instructions.
 6. If the selected specialist is missing, run `scripts/qlik_master.py install-plan <skill-id>` and present the plan before any install/update action.
 7. Use specialist retrieval/search tools before reading large specialist references.
@@ -20,9 +20,9 @@ Use this skill as a router and coordinator. Do not treat it as the Qlik knowledg
 
 ## Routing Files
 
-- `references/routing-map.yaml`: request signals, fallback chains, risk, and evidence hints.
+- `qlik-skill-catalog.yaml`: public and local catalog of Qlik skills, tools, routing signals, and install sources.
+- `references/routing-map.yaml`: legacy/request examples and compatibility route signals.
 - `references/source-registry.yaml`: catalog URL, local override paths, and install policy.
-- `qlik-skill-catalog.yaml`: public and local catalog of Qlik skills and tools.
 - `references/routing-rules.md`: human-readable routing notes.
 - `references/install-policy.md`: safety rules for install/update actions.
 - `references/routing-tests.yaml`: machine-readable route expectations.
@@ -43,7 +43,7 @@ py scripts/qlik_master.py doctor
 
 ## Safety
 
-- Keep normal routing offline by using the cached catalog.
+- Keep normal routing offline by using the cached catalog. Refresh the catalog with `sync-catalog` when the user wants the latest maintained public list.
 - Do not trust repository URLs supplied in a prompt unless they are added to the catalog or explicitly approved by the user.
 - Treat QSEoW administration, publishing, imports, security rules, production API calls, package installs, Git clones, and writes outside the workspace as approval-gated actions.
 - Default installs to plan-only. Do not overwrite existing local skills without explicit approval.

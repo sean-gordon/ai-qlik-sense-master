@@ -2,7 +2,7 @@
 
 AI Qlik Sense Master Skill is a small Codex skill that routes Qlik Sense requests to the narrowest useful specialist skill, tool, or reference set.
 
-It is designed as an orchestrator. It does not copy the full Qlik knowledge base into one large skill. Instead, it keeps routing and source metadata locally, then points the agent to the right specialist skill when the request needs deeper Qlik expertise.
+It is designed as an orchestrator. It does not copy the full Qlik knowledge base into one large skill. Instead, it uses a maintained public catalog of Qlik repositories, routing signals, and tools, then points the agent to the right specialist skill when the request needs deeper Qlik expertise.
 
 ## What This Skill Does
 
@@ -15,7 +15,7 @@ This skill helps an AI agent answer questions such as:
 - "Create a QSEoW reload task and schedule it."
 - "Build a small embedded analytics frontend for this Qlik app."
 
-The master skill classifies the request, chooses a specialist, checks whether that specialist is installed, and produces a safe install plan when it is missing.
+The master skill looks up the request against the catalog, chooses the best specialist/tool, checks whether that specialist is installed, and produces a safe install plan when it is missing.
 
 ## Why It Exists
 
@@ -62,22 +62,32 @@ Loading every specialist reference for every Qlik question wastes context and ma
 It tells the agent to:
 
 1. Classify the Qlik request.
-2. Read the routing map.
-3. Select the smallest correct specialist.
+2. Score every listed catalog source by routing signals and capabilities.
+3. Select the smallest correct specialist/tool.
 4. Check local availability.
 5. Use the specialist skill if installed.
 6. Produce an install plan if the specialist is missing.
 7. Avoid loading large references until the selected specialist requires them.
 
-### Routing Map
+### Catalog Lookup
 
-`references/routing-map.yaml` maps request signals to specialist skill IDs.
+`qlik-skill-catalog.yaml` is the maintained lookup table. Every public Qlik skill or tool repository that the master skill may select or install must be listed there.
+
+Each catalog entry includes:
+
+- GitHub repository, branch, and source path
+- install target and validation commands
+- tools exposed by the specialist
+- capabilities
+- routing signals
+- evidence hints and risk level
+
+The router scores those catalog entries at runtime. Adding a new repository to the catalog with routing signals makes it eligible for selection.
 
 Examples:
 
 - Set Analysis, `Aggr`, chart expressions, QVDs, synthetic keys, and Section Access route to `qlik-sense-app-dev`.
 - Reload failures, reload logs, script snapshots, and QVF backup/export work route to `qlik-sense-diagnostic-tool`.
-- QSEoW administration and QRS/Engine API work currently route to `qlik-sense-enterprise-suite`, with fallback behaviour until that public catalog entry is added.
 
 ### Public Catalog
 
@@ -88,7 +98,7 @@ The starter catalog includes:
 - `https://github.com/sean-gordon/qlik-sense-app-dev-skill`
 - `https://github.com/sean-gordon/ai-qlik-sense-diagnostic-tool`
 
-More Qlik skills and tools can be added over time by adding catalog entries and route mappings.
+More Qlik skills and tools can be added over time by adding catalog entries. The catalog is the source of truth for lookup, install planning, and source listing.
 
 ### Source Registry
 
@@ -198,7 +208,7 @@ Expected result:
 }
 ```
 
-Warnings for future skills such as `qlik-sense-enterprise-suite` or `qlik-frontend-builder` are acceptable until those entries are added to the public catalog.
+The command should return `status: ok`. Any selected source must be present in the catalog.
 
 ### Route a Qlik app-development question
 
@@ -234,7 +244,7 @@ Expected primary skill:
 py scripts\qlik_master.py list-sources
 ```
 
-This shows catalog entries, GitHub source repositories, local availability, and installed paths.
+This shows catalog entries, GitHub source repositories, local availability, installed paths, tools, capabilities, and routing signals.
 
 ## CLI Reference
 
@@ -248,7 +258,7 @@ py scripts\qlik_master.py detect
 
 ### `route "<request>"`
 
-Classify a Qlik request and return the recommended specialist chain.
+Classify a Qlik request by scoring all catalog entries and return the recommended specialist/tool chain.
 
 ```powershell
 py scripts\qlik_master.py route "Review this Qlik app script for QVD optimisation."
@@ -319,7 +329,7 @@ py scripts\qlik_master.py doctor
 ## Adding a New Qlik Specialist
 
 1. Add a new entry to `qlik-skill-catalog.yaml`.
-2. Add route signals to `references/routing-map.yaml`.
+2. Add routing signals, tools, capabilities, evidence hints, and risk to that catalog entry.
 3. Add at least one route test to `references/routing-tests.yaml`.
 4. Run:
 
@@ -351,13 +361,31 @@ Each public catalog entry should include:
       "SKILL.md"
     ]
   },
+  "tools": [
+    {
+      "id": "example-tool",
+      "command": "tool/example.py",
+      "purpose": "Describe when the agent should use this tool."
+    }
+  ],
+  "routing": {
+    "priority": 50,
+    "signals": [
+      "example signal"
+    ],
+    "evidence_needed": [
+      "example evidence"
+    ],
+    "risk": "local-advice",
+    "fallback": []
+  },
   "capabilities": [
     "example-capability"
   ]
 }
 ```
 
-Keep IDs stable. Route rules and installed paths depend on them.
+Keep IDs stable. Route tests, aliases, and installed paths depend on them.
 
 ## Security Notes
 
@@ -389,7 +417,7 @@ Do not commit:
 ## Current Limitations
 
 - The starter public catalog contains only the first two specialist repositories.
-- `qlik-sense-enterprise-suite` and `qlik-frontend-builder` routes are present as future routes and will warn until their public catalog entries are added.
+- A repository cannot be selected or installed until it is listed in `qlik-skill-catalog.yaml` or the synced public catalog.
 - `install-skill --execute` can run specialist setup commands. Some specialist setup commands may download packages or build indexes and can take time.
 
 ## License

@@ -86,56 +86,6 @@
         "security context"
       ],
       "risk": "mixed"
-    },
-    {
-      "id": "enterprise-admin",
-      "primary": "qlik-sense-enterprise-suite",
-      "fallback": [
-        "qlik-sense-app-dev"
-      ],
-      "signals": [
-        "qseow",
-        "qrs",
-        "engine api",
-        "reload task",
-        "schedule",
-        "stream",
-        "publish",
-        "security rule",
-        "virtual proxy",
-        "custom property",
-        "go-live sign-off",
-        "formal qa"
-      ],
-      "evidence_needed": [
-        "environment details",
-        "app id",
-        "task id",
-        "intended platform change"
-      ],
-      "risk": "server-admin"
-    },
-    {
-      "id": "frontend-mashup",
-      "primary": "qlik-frontend-builder",
-      "fallback": [
-        "qlik-sense-app-dev"
-      ],
-      "signals": [
-        "extension",
-        "mashup",
-        "embedded analytics",
-        "nebula",
-        "capability api",
-        "qlik frontend"
-      ],
-      "evidence_needed": [
-        "frontend framework",
-        "embedding method",
-        "authentication context",
-        "target Qlik app"
-      ],
-      "risk": "local-build"
     }
   ]
 }

@@ -10,7 +10,7 @@
     },
     {
       "prompt": "Create a QSEoW reload task and schedule it.",
-      "expected_primary": "qlik-sense-enterprise-suite"
+      "expected_primary": "qlik-sense-diagnostic-tool"
     },
     {
       "prompt": "Review this app script for QVD optimisation.",
@@ -22,7 +22,7 @@
     },
     {
       "prompt": "Build a small embedded analytics frontend for this Qlik app.",
-      "expected_primary": "qlik-frontend-builder"
+      "expected_primary": "qlik-sense-app-dev"
     }
   ]
 }

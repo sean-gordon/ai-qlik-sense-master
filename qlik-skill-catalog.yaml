@@ -25,6 +25,62 @@
           "tool/qlik_search.py --self-test"
         ]
       },
+      "tools": [
+        {
+          "id": "qlik-search",
+          "command": "tool/qlik_search.py",
+          "purpose": "Search the Qlik Sense app-development reference corpus for focused passages."
+        }
+      ],
+      "routing": {
+        "priority": 80,
+        "signals": [
+          "set analysis",
+          "aggr",
+          "total",
+          "above",
+          "chart expression",
+          "kpi",
+          "dash",
+          "null",
+          "load script",
+          "resident",
+          "applymap",
+          "join",
+          "keep",
+          "qvd",
+          "incremental",
+          "synthetic key",
+          "circular reference",
+          "section access",
+          "visualisation",
+          "visualization",
+          "data model",
+          "qvd optimisation",
+          "qvd optimization",
+          "expression performance",
+          "komment",
+          "kaptain",
+          "write-back",
+          "writeback",
+          "comments not saving",
+          "partial reload comments",
+          "embedded analytics",
+          "extension",
+          "mashup",
+          "nebula",
+          "capability api",
+          "qlik frontend"
+        ],
+        "evidence_needed": [
+          "script or expression",
+          "dimensions and measures",
+          "selection context",
+          "expected vs actual result"
+        ],
+        "risk": "local-advice",
+        "fallback": []
+      },
       "capabilities": [
         "app-development",
         "load-script",
@@ -52,6 +108,49 @@
         "setup_commands": [],
         "validation_commands": [
           "SKILL.md"
+        ]
+      },
+      "tools": [
+        {
+          "id": "diagnostic-workflow",
+          "command": "SKILL.md",
+          "purpose": "Guide reload-log, script-snapshot, QVF backup/export, and QSEoW diagnostic workflows."
+        }
+      ],
+      "routing": {
+        "priority": 90,
+        "signals": [
+          "reload failed",
+          "reload failure",
+          "reload log",
+          "script log",
+          "script snapshot",
+          "qvf backup",
+          "backup app",
+          "export app",
+          "live script drift",
+          "reload error",
+          "task failed",
+          "qseow",
+          "qrs",
+          "engine api",
+          "reload task",
+          "schedule",
+          "stream",
+          "publish",
+          "security rule",
+          "virtual proxy",
+          "custom property"
+        ],
+        "evidence_needed": [
+          "reload log",
+          "app id or app name",
+          "script snapshot",
+          "environment details"
+        ],
+        "risk": "diagnostic",
+        "fallback": [
+          "qlik-sense-app-dev"
         ]
       },
       "capabilities": [

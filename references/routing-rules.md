@@ -4,11 +4,11 @@ Use deterministic routing before reading specialist material.
 
 ## Priority
 
-1. Prefer diagnostics when the user provides or asks about reload logs, script snapshots, QVF backup/export, task failure evidence, or live-vs-local script drift.
-2. Prefer the Qlik Sense App Dev Skill for load script, data model, Set Analysis, chart expression, visualisation, Section Access, QVD, and performance questions.
-3. Prefer enterprise administration only when the user explicitly asks for QSEoW platform/server changes such as QRS, Engine API, reload tasks, schedules, streams, publishing, security rules, virtual proxies, or formal QA/sign-off.
-4. Prefer the Qlik Sense App Dev Skill first for Komment/write-back unless logs, services, security rules, or platform APIs are needed.
-5. For future skills that are not installed or not in the catalog, return the intended skill ID plus the fallback chain.
+1. Score every source listed in `qlik-skill-catalog.yaml` before reading specialist material.
+2. Prefer diagnostics when the catalog signals match reload logs, script snapshots, QVF backup/export, task failure evidence, QSEoW tool work, or live-vs-local script drift.
+3. Prefer the Qlik Sense App Dev Skill when the catalog signals match load script, data model, Set Analysis, chart expression, visualisation, Section Access, QVD, Komment, or performance questions.
+4. Only select or install repositories that are listed in the maintained catalog.
+5. When a new public Qlik skill is added, add its GitHub source, tools, capabilities, routing signals, evidence hints, risk, and route tests to the catalog.
 
 ## Evidence
 
