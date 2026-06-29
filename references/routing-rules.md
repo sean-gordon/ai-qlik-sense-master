@@ -23,3 +23,20 @@ Ask for the narrowest missing evidence only after routing:
 ## Token Control
 
 Read only the selected specialist `SKILL.md` after routing. Use specialist search or retrieval tools before opening large references.
+
+## Partial Reload, Section Access, and Komment Write-Back
+
+For QSEoW apps with Komment/QIX write-back plus a partial-reload model, route diagnostics and
+read `references/qseow-partial-reload-section-access-playbook.md` when the request matches:
+
+- "partial reload does not update, but full reload does" (likely an unprefixed load in the
+  partial-executed path aborting with `Table 'X' not found`).
+- "Komment write-back saved / QVD updated but the front-end reverts" (the fold-back partial
+  reload is failing — check `CheckScriptSyntax` first, then probe a partial reload).
+- "`Table 'SA_AdminUsers' not found`" or Section Access breaking only on partial reload
+  (guard the Section Access build with `If not IsPartialReload()`).
+
+Key facts the playbook encodes: a partial reload runs only `Add`/`Replace`/`Merge` loads; a
+reload compiles the whole script (including code after `Exit Script`) before running; and you
+can trigger/inspect a partial reload via the Engine API `DoReloadEx({qPartial:true})` +
+`GetProgress` (QRS task start only does full reloads).

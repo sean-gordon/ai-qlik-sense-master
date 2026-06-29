@@ -1,6 +1,6 @@
 {
   "catalog_version": 2,
-  "updated_at": "2026-06-25",
+  "updated_at": "2026-06-29",
   "entries": [
     {
       "id": "qlik-sense-app-dev",
@@ -140,13 +140,27 @@
           "publish",
           "security rule",
           "virtual proxy",
-          "custom property"
+          "custom property",
+          "partial reload",
+          "partial reload fails",
+          "table not found",
+          "komment write-back reverts",
+          "saved but reverts",
+          "section access partial reload",
+          "sa_adminusers not found",
+          "doreloadex",
+          "group by order by"
         ],
         "evidence_needed": [
           "reload log",
           "app id or app name",
           "script snapshot",
-          "environment details"
+          "environment details",
+          "full vs partial reload behaviour",
+          "doreloadex/getprogress output for partial reloads"
+        ],
+        "reference_hints": [
+          "references/qseow-partial-reload-section-access-playbook.md"
         ],
         "risk": "diagnostic",
         "fallback": [
